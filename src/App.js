@@ -32,7 +32,7 @@ const App = () => {
         })
 
         // Just use the first one we get
-        let locationKey = locations.data? locations.data[0].Key : 2132170
+        let locationKey = typeof locations.data == 'object'? locations.data[0].Key : 2132170
 
         // Now fetch hour-by-hour
 
