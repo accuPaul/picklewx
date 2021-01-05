@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
+import { Search } from 'react-bootstrap-icons'
 
 const CitySearch = ({getQuery}) => {
     const  [text, setText] = useState('')
@@ -12,7 +13,7 @@ const CitySearch = ({getQuery}) => {
     }
 
     return (
-        <Form onSubmit={(e) => onSubmit(e)}>
+        <Form inline onSubmit={(e) => onSubmit(e)}>
             <Form.Group controlId="cityRequest">
                 <Form.Control 
                 type="text" 
@@ -22,7 +23,7 @@ const CitySearch = ({getQuery}) => {
                 onChange={(e) => setText(e.target.value)}
                 />
                 <Button variant="primary" type="submit">
-                    Submit
+                    <Search className="ml-4" />
                 </Button>
             </Form.Group>
         </Form>

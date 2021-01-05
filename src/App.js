@@ -1,29 +1,31 @@
 import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
-import Header from "./components/Header";
+import Header from "./components/layout/Header";
+import LeftSide from "./components/layout/LeftSide";
 import Forecastgrid from "./components/forecasts/ForecastGrid";
-import CitySearch from './components/CitySearch'
+import CitySearch from './components/layout/CitySearch'
 import axios from "axios";
 import "./App.css";
+import { Col, Row } from "react-bootstrap";
 
 const App = () => {
   const [items, setItems] = useState([]);
+  const [dailyForecasts, setDailyForecasts] = useState([])
+  const [indices, setIndices] = useState([])
   const [isLoading, setIsLoading] = useState(true);
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState('Mt. Pleasant, SC')
 
   useEffect(() => {
     const blob = process.env.REACT_APP_NONSENSE
-    const testKey = process.env.REACT_APP_TESTER
+    //const testKey = process.env.REACT_APP_TESTER
 
     setIsLoading(true)
 
     const fetchForecasts = async () => {
       // first fetch the location key for the requested city...
 
-      console.log(`api key is ${blob}`)
-
       const locations = await axios(
-        `http://api.accuweather.com/locations/v1/cities/search.json?q=${query?query:'Mt. Pleasant, SC'}&apikey=${testKey}&language=en-us&alias=always`
+        `http://dataservice.accuweather.com/locations/v1/cities/search.json?q=${query}&apikey=${blob}&language=en-us&alias=always`
         )
         .catch(function(error) {
           console.log(error)
@@ -32,13 +34,29 @@ const App = () => {
         // Just use the first one we get
         let locationKey = locations.data? locations.data[0].Key : 2132170
 
+        // Now fetch hour-by-hour
+
         const result = await axios(
-        `http://apidev.accuweather.com/forecasts/v1/hourly/12hour/${locationKey}?details=true&apikey=${testKey}`
+        `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationKey}?details=true&apikey=${blob}`
       )
       .catch(function(error) { console.error(error)});
 
-      console.log(result.data);
       setItems(result.data);
+
+      // Fetch Indices
+      const ind = await axios(
+        `https://dataservice.accuweather.com/indices/v1/daily/5day/${locationKey}/6?apikey=${blob}`
+      )
+      .catch(function(error) { console.error(error)});
+      setIndices(ind.data)
+
+      // Fetch Daily Forecast
+      const daily = await axios(
+        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${blob}`
+      )
+      .catch(function(error) { console.error(error)});
+      setDailyForecasts(daily.data.DailyForecasts);
+
       setIsLoading(false);
     };
 
@@ -47,11 +65,16 @@ const App = () => {
 
   return (
     <Container>
-      <div className="header">
-        <Header />
-        <CitySearch getQuery={(city) => setQuery(city)} />
+        <Header city={query}/>
+        <Row>
+          <Col xs={2}>
+            <LeftSide dailyForecasts={dailyForecasts} indices={indices} />
+          </Col>
+          <Col xs={10}>
+          <CitySearch getQuery={(city) => setQuery(city)} />
         <Forecastgrid isLoading={isLoading} items={items} />
-      </div>
+          </Col>
+        </Row>
     </Container>
   );
 };
