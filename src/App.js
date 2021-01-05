@@ -14,6 +14,7 @@ const App = () => {
   const [indices, setIndices] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState('Mt. Pleasant, SC')
+  const [locationId, setLocationID] = useState("7-340578_1_AL")
 
   useEffect(() => {
     const blob = process.env.REACT_APP_NONSENSE
@@ -22,22 +23,11 @@ const App = () => {
     setIsLoading(true)
 
     const fetchForecasts = async () => {
-      // first fetch the location key for the requested city...
-
-      const locations = await axios(
-        `http://dataservice.accuweather.com/locations/v1/cities/search.json?q=${query}&apikey=${blob}&language=en-us&alias=always`
-        )
-        .catch(function(error) {
-          console.log(error)
-        })
-
-        // Just use the first one we get
-        let locationKey = typeof locations.data == 'object'? locations.data[0].Key : 2132170
-
+      
         // Now fetch hour-by-hour
 
         const result = await axios(
-        `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationKey}?details=true&apikey=${blob}`
+        `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationId}?details=true&apikey=${blob}`
       )
       .catch(function(error) { console.error(error)});
 
@@ -45,14 +35,14 @@ const App = () => {
 
       // Fetch Indices
       const ind = await axios(
-        `https://dataservice.accuweather.com/indices/v1/daily/5day/${locationKey}/6?apikey=${blob}`
+        `https://dataservice.accuweather.com/indices/v1/daily/5day/${locationId}/6?apikey=${blob}`
       )
       .catch(function(error) { console.error(error)});
       setIndices(ind.data)
 
       // Fetch Daily Forecast
       const daily = await axios(
-        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${blob}`
+        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationId}?apikey=${blob}`
       )
       .catch(function(error) { console.error(error)});
       setDailyForecasts(daily.data.DailyForecasts);
@@ -61,17 +51,18 @@ const App = () => {
     };
 
     fetchForecasts();
-  }, [query]);
+  }, [locationId]);
 
   return (
     <Container>
-        <Header city={query}/>
+        <Header city={query} />
         <Row>
           <Col xs={2}>
             <LeftSide dailyForecasts={dailyForecasts} indices={indices} />
           </Col>
           <Col xs={10}>
-          <CitySearch getQuery={(city) => setQuery(city)} />
+          <CitySearch getQuery={(city) => setQuery(city)} 
+          getLocationId={(location)=> setLocationID(location)} />
         <Forecastgrid isLoading={isLoading} items={items} />
           </Col>
         </Row>

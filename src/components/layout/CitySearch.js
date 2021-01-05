@@ -2,14 +2,26 @@ import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import { Search } from 'react-bootstrap-icons'
+import axios from "axios";
 
-const CitySearch = ({getQuery}) => {
+const CitySearch = ({getQuery, getLocationId}) => {
     const  [text, setText] = useState('')
+    const blob = process.env.REACT_APP_NONSENSE
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault()
-        console.log(e)
         getQuery(text)
+
+        // Fetch the new location key for the requested city...
+       const locations = await axios(
+        `http://dataservice.accuweather.com/locations/v1/cities/search.json?q=${text}&apikey=${blob}&language=en-us&alias=always`
+        )
+        .catch(function(error) {
+          console.log(error)
+        })
+
+        getLocationId(locations.data[0].Key)
+
     }
 
     return (
