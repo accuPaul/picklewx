@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, ListGroup, ListGroupItem } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
+import GetIcon from '../middleware/GetIcon'
 
 const ForecastDetails = ({ item }) => {
   function getLocalTime(forecastDateTime)
@@ -8,17 +9,11 @@ const ForecastDetails = ({ item }) => {
       return new Date(forecastDateTime).toLocaleTimeString();
   }
 
-  function getIcon(iconNumber) {
-    var icon = iconNumber +"";
-    while (icon.length < 2) icon = "0"+icon;
-    return "/icons/"+icon+"-s.png"
-  }
-
   return (
     <Col className="container-fluid mt-4">
     <Card border={item.HasPrecipitation ? 'warning' : 'success'}>
       <Card.Header>{getLocalTime(item.DateTime)}</Card.Header>
-      <Card.Img variant="top" src={process.env.PUBLIC_URL+getIcon(item.WeatherIcon)} />
+      <Card.Img variant="top" src={process.env.PUBLIC_URL+GetIcon(item.WeatherIcon)} />
       <Card.Body>
         <Card.Title>{item.IconPhrase}</Card.Title>
         <Card.Text>

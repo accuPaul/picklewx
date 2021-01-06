@@ -1,4 +1,5 @@
 import Navbar from 'react-bootstrap/Navbar'
+import React from 'react'
 
 const Header = ({city}) => {
   return (
@@ -24,4 +25,4 @@ const Header = ({city}) => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

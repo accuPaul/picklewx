@@ -42,5 +42,5 @@ const CitySearch = ({getQuery, getLocationId}) => {
     )
 }
 
-export default CitySearch
+export default React.memo(CitySearch)
 

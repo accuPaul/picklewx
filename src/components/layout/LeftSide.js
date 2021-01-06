@@ -16,4 +16,4 @@ const LeftSide = ({dailyForecasts, indices}) => {
 
 }
 
-export default LeftSide
+export default React.memo(LeftSide)

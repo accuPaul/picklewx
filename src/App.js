@@ -29,7 +29,7 @@ const App = () => {
         const result = await axios(
         `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationId}?details=true&apikey=${blob}`
       )
-      .catch(function(error) { console.error(error)});
+      .catch(function(error) { console.log(error)});
 
       setItems(result.data);
 
@@ -37,7 +37,7 @@ const App = () => {
       const ind = await axios(
         `https://dataservice.accuweather.com/indices/v1/daily/5day/${locationId}/6?apikey=${blob}`
       )
-      .catch(function(error) { console.error(error)});
+      .catch(function(error) { console.log(error)});
       setIndices(ind.data)
 
       // Fetch Daily Forecast
@@ -54,13 +54,13 @@ const App = () => {
   }, [locationId]);
 
   return (
-    <Container>
+    <Container fluid>
         <Header city={query} />
         <Row>
-          <Col xs={2}>
+          <Col xs={4} sm={4} md="2" lg="2">
             <LeftSide dailyForecasts={dailyForecasts} indices={indices} />
           </Col>
-          <Col xs={10}>
+          <Col xs={{ span:7, offset:1}} sm={{ span:7, offset:1}} md="8" lg="8">
           <CitySearch getQuery={(city) => setQuery(city)} 
           getLocationId={(location)=> setLocationID(location)} />
         <Forecastgrid isLoading={isLoading} items={items} />
