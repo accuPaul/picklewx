@@ -4,6 +4,7 @@ import Header from "./components/layout/Header";
 import LeftSide from "./components/layout/LeftSide";
 import Forecastgrid from "./components/forecasts/ForecastGrid";
 import CitySearch from './components/layout/CitySearch'
+import ApiError from './components/layout/ApiError'
 import axios from "axios";
 import "./App.css";
 import { Col, Row } from "react-bootstrap";
@@ -29,7 +30,7 @@ const App = () => {
         const result = await axios(
         `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationId}?details=true&apikey=${blob}`
       )
-      .catch(function(error) { console.log(error)});
+      .catch((error) => ApiError(error));
 
       setItems(result.data);
 
@@ -37,12 +38,12 @@ const App = () => {
       const ind = await axios(
         `https://dataservice.accuweather.com/indices/v1/daily/5day/${locationId}/6?apikey=${blob}`
       )
-      .catch(function(error) { console.log(error)});
+      .catch((error) => ApiError(error));
       setIndices(ind.data)
 
       // Fetch Daily Forecast
       const daily = await axios(
-        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationId}?apikey=${blob}`
+        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationId}?apikey=${blob}&details=true`
       )
       .catch(function(error) { console.error(error)});
       setDailyForecasts(daily.data.DailyForecasts);

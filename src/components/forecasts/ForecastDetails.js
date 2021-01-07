@@ -22,8 +22,7 @@ const ForecastDetails = ({ item }) => {
         </Card.Text>
       </Card.Body>
       <ListGroup className="list-group-flush">
-        <ListGroupItem>Wind: {item.Wind.Speed.Value} {item.Wind.Speed.Unit}</ListGroupItem>
-        <ListGroupItem>Wind gusts up to {item.WindGust.Speed.Value} {item.WindGust.Speed.Unit}</ListGroupItem>
+        <ListGroupItem>Wind: {item.Wind.Direction.Localized} at {Math.round(item.Wind.Speed.Value)} {item.Wind.Speed.Unit}, gusts to {Math.round(item.WindGust.Speed.Value)} </ListGroupItem>
         <ListGroupItem>Probability of precipitation: {item.PrecipitationProbability}%</ListGroupItem>
       </ListGroup>
     </Card>

@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import GetIcon from '../middleware/GetIcon'
+import PrettyTemps from '../middleware/PrettyTemps'
 
 const DailyForecastDetails = ({ forecast, rating }) => {
   return (
@@ -10,8 +11,10 @@ const DailyForecastDetails = ({ forecast, rating }) => {
       <Card.Body>
         <Card.Title>{forecast.Day.IconPhrase}</Card.Title>
         <Card.Text>
-          {forecast.Temperature.Maximum.Value}&deg; / 
-          {forecast.Temperature.Minimum.Value}&deg;
+          {PrettyTemps(forecast.Temperature.Maximum.Value)} /{' '}
+          {PrettyTemps(forecast.Temperature.Minimum.Value)}<br />
+          Wind: {Math.round(forecast.Day.Wind.Speed.Value)}-{Math.round(forecast.Day.WindGust.Speed.Value)}<br />
+          Precip chance: {forecast.Day.PrecipitationProbability}%
         </Card.Text>
       </Card.Body>
       <Card.Footer>PickleWx Rating: {rating.Category}</Card.Footer>
