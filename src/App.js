@@ -8,6 +8,7 @@ import ApiError from './components/layout/ApiError'
 import "./App.css";
 import { Col, Row } from "react-bootstrap";
 import { FetchApi } from "./components/middleware/FetchApi";
+import NoData from "./components/layout/NoData";
 
 const App = () => {
   const [items, setItems] = useState([]);
@@ -27,13 +28,13 @@ const App = () => {
 
       FetchApi('/forecasts/v1/hourly/12hour/{locationId}?details=true',locationId)
       .then(response => { setItems(response.data)})
-      .catch(error => {ApiError(error)})
+      .catch(error => {<ApiError Error={error} />})
 
       // Fetch Indices
     
       FetchApi('/indices/v1/daily/5day/{locationId}/6?',locationId)
       .then(response => { setIndices(response.data)})
-      .catch(error => {console.log(error)})
+      .catch(error => {<ApiError Error={error} />})
       
       // Fetch Daily Forecast
       FetchApi('/forecasts/v1/daily/5day/{locationId}?details=true',locationId)
@@ -49,6 +50,7 @@ const App = () => {
   return (
     <Container fluid>
         <Header city={query} />
+        {items.length === 0? <NoData /> :
         <Row>
           <Col xs={4} sm={4} md="2" lg="2">
             <LeftSide dailyForecasts={dailyForecasts} indices={indices} />
@@ -58,7 +60,7 @@ const App = () => {
           getLocationId={(location)=> setLocationID(location)} />
         <Forecastgrid isLoading={isLoading} items={items} />
           </Col>
-        </Row>
+        </Row>}
     </Container>
   );
 };

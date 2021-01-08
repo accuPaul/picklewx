@@ -2,8 +2,8 @@ import axios from "axios"
 
 export function FetchApi (target, locationId)
 {
-    const blob = process.env.REACT_APP_TESTER
-    let url = "https://apidev.accuweather.com"
+    const blob = process.env.REACT_APP_NONSENSE
+    let url = "https://dataservice.accuweather.com"
     let keyString = "apikey="+blob
 
     if (target.includes("{text}"))
