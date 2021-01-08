@@ -2,6 +2,7 @@ import React from "react";
 import { Col, ListGroup, ListGroupItem } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import GetIcon from '../middleware/GetIcon'
+import PrettyTemps from '../middleware/PrettyTemps'
 
 const ForecastDetails = ({ item }) => {
   function getLocalTime(forecastDateTime)
@@ -17,7 +18,7 @@ const ForecastDetails = ({ item }) => {
       <Card.Body>
         <Card.Title>{item.IconPhrase}</Card.Title>
         <Card.Text>
-          {item.Temperature.Value}&deg;{item.Temperature.Unit}<br />
+          {PrettyTemps(item.Temperature.Value)}{item.Temperature.Unit}<br />
           <span className="text-muted">(Feels like {item.RealFeelTemperature.Value}&deg;)</span>
         </Card.Text>
       </Card.Body>

@@ -5,9 +5,9 @@ import LeftSide from "./components/layout/LeftSide";
 import Forecastgrid from "./components/forecasts/ForecastGrid";
 import CitySearch from './components/layout/CitySearch'
 import ApiError from './components/layout/ApiError'
-import axios from "axios";
 import "./App.css";
 import { Col, Row } from "react-bootstrap";
+import { FetchApi } from "./components/middleware/FetchApi";
 
 const App = () => {
   const [items, setItems] = useState([]);
@@ -18,35 +18,27 @@ const App = () => {
   const [locationId, setLocationID] = useState("7-340578_1_AL")
 
   useEffect(() => {
-    const blob = process.env.REACT_APP_NONSENSE
-    //const testKey = process.env.REACT_APP_TESTER
-
+    
     setIsLoading(true)
 
     const fetchForecasts = async () => {
       
         // Now fetch hour-by-hour
 
-        const result = await axios(
-        `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationId}?details=true&apikey=${blob}`
-      )
-      .catch((error) => ApiError(error));
-
-      setItems(result.data);
+      FetchApi('/forecasts/v1/hourly/12hour/{locationId}?details=true',locationId)
+      .then(response => { setItems(response.data)})
+      .catch(error => {ApiError(error)})
 
       // Fetch Indices
-      const ind = await axios(
-        `https://dataservice.accuweather.com/indices/v1/daily/5day/${locationId}/6?apikey=${blob}`
-      )
-      .catch((error) => ApiError(error));
-      setIndices(ind.data)
-
+    
+      FetchApi('/indices/v1/daily/5day/{locationId}/6?',locationId)
+      .then(response => { setIndices(response.data)})
+      .catch(error => {console.log(error)})
+      
       // Fetch Daily Forecast
-      const daily = await axios(
-        `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationId}?apikey=${blob}&details=true`
-      )
-      .catch(function(error) { console.error(error)});
-      setDailyForecasts(daily.data.DailyForecasts);
+      FetchApi('/forecasts/v1/daily/5day/{locationId}?details=true',locationId)
+      .then(response => { setDailyForecasts(response.data.DailyForecasts)})
+      .catch(error => {<ApiError Error={error} />})
 
       setIsLoading(false);
     };
