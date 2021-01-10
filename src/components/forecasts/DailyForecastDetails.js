@@ -17,7 +17,7 @@ const DailyForecastDetails = ({ forecast, rating }) => {
           Precip chance: {forecast.Day.PrecipitationProbability}%
         </Card.Text>
       </Card.Body>
-      <Card.Footer>PickleWx Rating: {rating.Category}</Card.Footer>
+      <Card.Footer>PickleWx Rating: {rating?rating.Category:'n/a'}</Card.Footer>
     </Card>
   );
 };

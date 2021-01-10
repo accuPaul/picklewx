@@ -26,18 +26,18 @@ const App = () => {
       
         // Now fetch hour-by-hour
 
-      FetchApi('/forecasts/v1/hourly/12hour/{locationId}?details=true',locationId)
+      await FetchApi('/forecasts/v1/hourly/12hour/{locationId}?details=true',locationId)
       .then(response => { setItems(response.data)})
       .catch(error => {<ApiError Error={error} />})
 
       // Fetch Indices
     
-      FetchApi('/indices/v1/daily/5day/{locationId}/6?',locationId)
+      await FetchApi('/indices/v1/daily/5day/{locationId}/6?',locationId)
       .then(response => { setIndices(response.data)})
       .catch(error => {<ApiError Error={error} />})
       
       // Fetch Daily Forecast
-      FetchApi('/forecasts/v1/daily/5day/{locationId}?details=true',locationId)
+      await FetchApi('/forecasts/v1/daily/5day/{locationId}?details=true',locationId)
       .then(response => { setDailyForecasts(response.data.DailyForecasts)})
       .catch(error => {<ApiError Error={error} />})
 
